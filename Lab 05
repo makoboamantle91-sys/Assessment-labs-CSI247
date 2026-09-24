@@ -1,0 +1,107 @@
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class MergeSortApp {
+
+    // a) mergeSort method that recursively splits and sorts the array
+    public static int[] mergeSort(int[] arr) {
+        // Create a copy to avoid modifying the original array incorrectly during recursion
+        int[] sortedArr = Arrays.copyOf(arr, arr.length);
+        runMergeSort(sortedArr, 0, sortedArr.length - 1);
+        return sortedArr;
+    }
+
+    private static void runMergeSort(int[] arr, int start, int end) {
+        if (start < end) {
+            int mid = start + (end - start) / 2;
+
+            // Sort left and right halves
+            runMergeSort(arr, start, mid);
+            runMergeSort(arr, mid + 1, end);
+
+            // Merge the sorted halves
+            merge(arr, start, mid, end);
+        }
+    }
+
+    // b) Fixed and implemented merge method from lab sheet
+    public static void merge(int arr[], int s, int m, int e) {
+        int size1 = m - s + 1; // No. of elements to go into the L sub-array
+        int size2 = e - m;     // No. of elements to go into the R sub-array
+        
+        int left[] = new int[size1];  // create left sub-array
+        int right[] = new int[size2]; // create right sub-array
+        
+        // Copy data into the sub-arrays
+        for (int i = 0; i < size1; i++) {
+            left[i] = arr[s + i];
+        }
+        for (int j = 0; j < size2; j++) {
+            right[j] = arr[m + 1 + j];
+        }
+        
+        // Merge sub-arrays
+        int i = 0;   // initial index of left array
+        int j = 0;   // initial index of right array
+        int cur = s; // initial index of final array
+        
+        while (i < size1 && j < size2) { // compare sub-array items to get the smallest
+            if (left[i] <= right[j]) {
+                arr[cur] = left[i];
+                i++;
+            } else {
+                arr[cur] = right[j];
+                j++;
+            }
+            cur++; // increment final array’s index
+        }
+        
+        while (i < size1) { // copy items left in L sub-array - they are the next smallest
+            arr[cur] = left[i];
+            i++;
+            cur++;
+        }
+        
+        while (j < size2) { // copy items left in the R sub array to final array
+            arr[cur] = right[j];
+            j++;
+            cur++;
+        }
+    }
+
+    // Interactive main test program matching requirements (i - v)
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String choice = "y";
+
+        // v. Continuously perform until user terminates
+        while (choice.equalsIgnoreCase("y")) {
+            int[] quizMarks = new int[30];
+            int count = 0;
+
+            // i. Use a while loop and Math.random to generate 30 values between 0 and 100
+            while (count < 30) {
+                quizMarks[count] = (int) (Math.random() * 101); // 0 to 100 inclusive
+                count++;
+            }
+
+            // ii. Display array contents before sorting
+            System.out.println("\n--- Quiz Marks Before Sorting ---");
+            System.out.println(Arrays.toString(quizMarks));
+
+            // iii. Sort array contents using mergeSort
+            int[] sortedMarks = mergeSort(quizMarks);
+
+            // iv. Display sorted array contents after sorting
+            System.out.println("--- Quiz Marks After Merge Sort ---");
+            System.out.println(Arrays.toString(sortedMarks));
+
+            // Prompt user to continue or terminate
+            System.out.print("\nDo you want to generate and sort another array? (y/n): ");
+            choice = scanner.next();
+        }
+
+        System.out.println("Program terminated. Goodbye!");
+        scanner.close();
+    }
+}
