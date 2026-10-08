@@ -1,0 +1,126 @@
+public abstract class Employee{
+    private String name;
+    private int id;
+
+    public Employee(){
+
+    }
+    public Employee(String name){
+        this.name=name;
+    }
+    public Employee(String name, int id ){
+        this.name = name;
+        this.id = id;
+    }
+
+    public String getname(){
+        return name;
+    }
+    public void setname(){
+         this.name = name;
+    }
+
+    public int getid(){
+        return id;
+    }
+    public void setid(){
+        this.id = id;
+    }
+
+    public abstract int computeSalary()[
+        return Salary;
+    ]
+
+    @Override
+    public String toString(){
+        return "Employee [Name=" + name + ", Id=" + id  "]";
+    
+    }
+
+    @Override
+    public boolean equals(){
+
+    }
+}
+import java.util.Employed;
+
+public class Teacher implements Employee{
+    private String subject;
+    private int hours;
+    private int payperhour;
+
+    public Teacher(String name, int id, String subject, int hours, int payperhour){
+        super(name,id);
+        this.subject = subject;
+        this. hours = hours;
+        this.payperhour = payperhour;
+
+    }
+      
+     public String getSubject(){
+        return Subject;
+     }
+     public void setSubject(){
+        this.subject = subject;
+     }
+     public int gethours(){
+        return hours;
+     }
+     public void sethours(){
+        this.hours = hours;
+     }
+     public int getpayperhour(){
+        return payperhour;
+     }
+     public void setpayperhour(){
+        this.payperhour = payperhour;
+     }
+          
+     public int computeSalary(){
+        return Salary "hours worker * hourly rate";
+     }
+     @Override
+    public String toString(){
+        return "Employee [Name=" + name + ", Id=" + id + ", Subject=" + subject + ", hours =" + hours + ", Payperhour=" + payperhour  "]";
+    }
+
+    @Override
+    public boolean equals(){
+
+    }
+}     
+ import java.util.Employed;
+
+public class Admin implements Employee{
+    private int monthlySalary;
+    private String role;
+
+    public Admin(String name, int id, int monthlySalary, String role){
+        super(name,id);
+        this.monthlySalary= monthlySalary;
+        this.role= role;
+    }
+
+    public int getmonthlySalary(){
+        return monthlySalary;
+    }
+    public void setmonthlySalary(){
+        this.monthlysalary= monthlySalary;
+    }
+    public String role(){
+        return role;
+    }
+    public void setrole(){
+        this.role= role;
+    }
+
+    @Override
+    public String toString(){
+        return "Employee [Name=" + name + ", Id=" + id + ", MonthlySalary=" + monthlySalary + ", Role=" + role "]";
+    }
+
+    @Override
+    public boolean equals(){
+
+    }
+}
