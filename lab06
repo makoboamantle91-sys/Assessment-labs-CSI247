@@ -103,39 +103,164 @@ public class Teacher extends Employee{
                this.getid() == other.getid() && 
                Double.compare(this.computeSalary(), other.computeSalary()) == 0;
     }
-}     
- import java.util.Employed;
+}    
 
-public class Admin implements Employee{
-    private int monthlySalary;
+public class Admin extends Employee {
+    private double monthlySalary; // Changed to double to match Employee's computeSalary return type
     private String role;
 
-    public Admin(String name, int id, int monthlySalary, String role){
-        super(name,id);
-        this.monthlySalary= monthlySalary;
-        this.role= role;
+    // Constructor passing name and id to the super class
+    public Admin(String name, int id, String role, double monthlySalary) {
+        super(name, id);
+        this.role = role;
+        this.monthlySalary = monthlySalary;
     }
 
-    public int getmonthlySalary(){
+    public double getmonthlySalary() {
         return monthlySalary;
     }
-    public void setmonthlySalary(){
-        this.monthlysalary= monthlySalary;
+
+    // Fixed: Added parameter and fixed case spelling
+    public void setmonthlySalary(double monthlySalary) {
+        this.monthlySalary = monthlySalary;
     }
-    public String role(){
+
+    public String getrole() {
         return role;
     }
-    public void setrole(){
-        this.role= role;
+
+    // Fixed: Added parameter
+    public void setrole(String role) {
+        this.role = role;
     }
 
+    // Fixed: Added missing required method implementation from Employee
     @Override
-    public String toString(){
-        return "Employee [Name=" + name + ", Id=" + id + ", MonthlySalary=" + monthlySalary + ", Role=" + role "]";
+    public double computeSalary() {
+        return this.monthlySalary;
     }
 
+    // Fixed: Used getters for parent private fields
     @Override
-    public boolean equals(){
+    public String toString() {
+        return "Admin [Name=" + getname() + ", Id=" + getid() + 
+               ", Role=" + role + ", MonthlySalary=" + monthlySalary + "]";
+    }
 
+    // Fixed: Overriding equals() per lab instructions: matching role, ID, and salary
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        
+        Admin other = (Admin) obj;
+        
+        // Admin employees are equal if role, ID, and monthly salary match
+        return this.role.equalsIgnoreCase(other.role) && 
+               this.getid() == other.getid() && 
+               Double.compare(this.monthlySalary, other.monthlySalary) == 0;
     }
 }
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.util.Scanner;
+
+public class RunPayroll {
+    public static void main(String[] args) {
+        // Create an array to hold up to 50 employees
+        Employee[] employees = new Employee[50];
+        int count = 0;
+
+        // 1. Read information from the file
+        try {
+            File file = new File("employees.txt");
+            Scanner scanner = new Scanner(file);
+
+            while (scanner.hasNextLine() && count < employees.length) {
+                String line = scanner.nextLine().trim();
+                if (line.isEmpty()) continue; // skip empty lines
+
+                // Split line using semicolon delimiter
+                String[] tokens = line.split(";");
+
+                String name = tokens[0].trim();
+                int id = Integer.parseInt(tokens[1].trim());
+
+                if (tokens.length == 4) {
+                    // It is an Admin record: Name;ID;Role;MonthlySalary
+                    String role = tokens[2].trim();
+                    double salary = Double.parseDouble(tokens[3].trim());
+                    employees[count] = new Admin(name, id, role, salary);
+                    count++;
+                } else if (tokens.length == 5) {
+                    // It is a Teacher record: Name;ID;Subject;Hours;HourlyRate
+                    String subject = tokens[2].trim();
+                    int hours = Integer.parseInt(tokens[3].trim());
+                    double rate = Double.parseDouble(tokens[4].trim());
+                    employees[count] = new Teacher(name, id, subject, hours, rate);
+                    count++;
+                }
+            }
+            scanner.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("Error: 'employees.txt' file not found. Please create it first!");
+            return;
+        }
+
+        // 2. Process salaries and write payment details to separate files
+        double totalTeacherPay = 0;
+        double totalAdminPay = 0;
+
+        try {
+            PrintWriter teacherWriter = new PrintWriter("teacherspay.txt");
+            PrintWriter adminWriter = new PrintWriter("adminpay.txt");
+
+            // Write headers for output files
+            teacherWriter.println("--- Teacher Payroll Details ---");
+            adminWriter.println("--- Admin Payroll Details ---");
+
+            for (int i = 0; i < count; i++) {
+                Employee emp = employees[i];
+                double salary = emp.computeSalary(); // Polymorphic method call
+
+                if (emp instanceof Teacher) {
+                    teacherWriter.printf("Name: %-15s | ID: %-6d | Salary: P%.2f%n", emp.getname(), emp.getid(), salary);
+                    totalTeacherPay += salary;
+                } else if (emp instanceof Admin) {
+                    adminWriter.printf("Name: %-15s | ID: %-6d | Salary: P%.2f%n", emp.getname(), emp.getid(), salary);
+                    totalAdminPay += salary;
+                }
+            }
+
+            // Add total summaries at the bottom of each text file
+            teacherWriter.println("----------------------------------------");
+            teacherWriter.printf("Total Teacher Category Pay: P%.2f%n", totalTeacherPay);
+            
+            adminWriter.println("----------------------------------------");
+            adminWriter.printf("Total Admin Category Pay: P%.2f%n", totalAdminPay);
+
+            // Close file resources
+            teacherWriter.close();
+            adminWriter.close();
+
+        } catch (FileNotFoundException e) {
+            System.out.println("Error writing payroll files: " + e.getMessage());
+        }
+
+        // 3. Display summary metrics to the terminal console screen
+        double totalWageBill = totalTeacherPay + totalAdminPay;
+        System.out.println("====== MONTHLY PAYROLL SUMMARY REPORT ======");
+        System.out.printf("Total Teacher Category Expenditure : P%.2f%n", totalTeacherPay);
+        System.out.printf("Total Admin Category Expenditure   : P%.2f%n", totalAdminPay);
+        System.out.println("--------------------------------------------");
+        System.out.printf("Total Overall Monthly Wage Bill    : P%.2f%n", totalWageBill);
+        System.out.println("============================================");
+    }
+}
+
