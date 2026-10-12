@@ -16,14 +16,14 @@ public abstract class Employee{
     public String getname(){
         return name;
     }
-    public void setname(){
+    public void setname(String name){
          this.name = name;
     }
 
     public int getid(){
         return id;
     }
-    public void setid(){
+    public void setid(int id){
         this.id = id;
     }
 
@@ -39,12 +39,17 @@ public abstract class Employee{
 
     @Override
     public boolean equals(){
-
+        if (this==obj)
+         return true;
+        if (obj == null || getClass() != obj.getClass())
+          return false;
+        Employee other = (Employee) obj;
+        return this.id == other.id;
     }
 }
 import java.util.Employed;
 
-public class Teacher implements Employee{
+public class Teacher extends Employee{
     private String subject;
     private int hours;
     private int payperhour;
@@ -60,33 +65,43 @@ public class Teacher implements Employee{
      public String getSubject(){
         return Subject;
      }
-     public void setSubject(){
+     public void setSubject(String subject){
         this.subject = subject;
      }
      public int gethours(){
         return hours;
      }
-     public void sethours(){
+     public void sethours(int hours){
         this.hours = hours;
      }
      public int getpayperhour(){
         return payperhour;
      }
-     public void setpayperhour(){
+     public void setpayperhour(double payperhour){
         this.payperhour = payperhour;
      }
           
      public int computeSalary(){
-        return Salary "hours worker * hourly rate";
+        return Salary this.hours * this.payperhour";
      }
-     @Override
+        @Override
     public String toString(){
-        return "Employee [Name=" + name + ", Id=" + id + ", Subject=" + subject + ", hours =" + hours + ", Payperhour=" + payperhour  "]";
+     return "Teacher [Name=" + getname() + ", Id=" + getid() +  ", Subject=" + subject + ", Hours=" + hours + ", PayPerHour=" + payperhour + "]";
     }
+@Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        
+        Teacher other = (Teacher) obj;
 
-    @Override
-    public boolean equals(){
-
+        return this.subject.equalsIgnoreCase(other.subject) && 
+               this.getid() == other.getid() && 
+               Double.compare(this.computeSalary(), other.computeSalary()) == 0;
     }
 }     
  import java.util.Employed;
