@@ -1,0 +1,83 @@
+package lab07;
+
+public class LabTester implements BigAndSmall<Integer> {
+
+    // Part (c): Generic printArray method from slide 19
+    public static <E> void printArray(E[] inputArray) {
+        for (E element : inputArray) {
+            if (element != null) {
+                System.out.printf("%s ", element);
+            }
+        }
+        System.out.println();
+    }
+
+    // Part (d): Implementation of BigAndSmall interface methods
+    @Override
+    public Integer findBig(Integer[] array) {
+        if (array == null || array.length == 0) return null;
+        Integer max = array[0];
+        for (Integer val : array) {
+            if (val != null && (max == null || val.compareTo(max) > 0)) {
+                max = val;
+            }
+        }
+        return max;
+    }
+
+    @Override
+    public Integer findSmall(Integer[] array) {
+        if (array == null || array.length == 0) return null;
+        Integer min = array[0];
+        for (Integer val : array) {
+            if (val != null && (min == null || val.compareTo(min) < 0)) {
+                min = val;
+            }
+        }
+        return min;
+    }
+
+    public static void main(String[] args) {
+        System.out.println("--- Testing Generic Set Class ---");
+        Set<Integer> intSet = new Set<>();
+        Set<Double> doubleSet = new Set<>();
+        Set<String> stringSet = new Set<>();
+
+        // Populate sets
+        intSet.add(10);
+        intSet.add(20);
+        doubleSet.add(5.5);
+        stringSet.add("Java");
+
+        // Basic operations
+        System.out.println("Search result (found): " + intSet.search(10));
+        intSet.remove(10);
+        System.out.println("Search result after removal (null): " + intSet.search(10));
+
+        // CRITICAL REQUIREMENT TEST: Try to insert a String into a Set of Integers
+        // Un-commenting the line below will trigger a compile-time type safety error:
+        // intSet.add("Hello World"); 
+
+        System.out.println("\n--- Testing printArray Method ---");
+        Integer[] intArray = {1, 2, 3, 4, 5};
+        String[] stringArray = {"Alpha", "Beta", "Gamma"};
+        printArray(intArray);
+        printArray(stringArray);
+
+        System.out.println("\n--- Testing BigAndSmall Interface ---");
+        LabTester tester = new LabTester();
+        Integer[] sampleValues = {45, 12, 89, 4, 67};
+        System.out.println("Biggest: " + tester.findBig(sampleValues));
+        System.out.println("Smallest: " + tester.findSmall(sampleValues));
+
+        System.out.println("\n--- Testing Generic Pair Class ---");
+        Pair<Integer, Double> pair1 = new Pair<>(10, 20.5);
+        Pair<Float, Integer> pair2 = new Pair<>(5.5f, 2);
+
+        Pair<Double, Double> sumResult = pair1.add(pair2);
+        Pair<Double, Double> productResult = pair1.multiply(pair2);
+
+        System.out.println("Sum first: " + sumResult.getFirst() + ", second: " + sumResult.getSecond());
+        System.out.println("Product first: " + productResult.getFirst() + ", second: " + productResult.getSecond());
+    }
+}
