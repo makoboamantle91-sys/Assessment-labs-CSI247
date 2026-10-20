@@ -1,0 +1,55 @@
+package lab07;
+
+public class Pair<T extends Number, U extends Number> {
+    private T first;
+    private U second;
+
+    public Pair(T first, U second) {
+        this.first = first;
+        this.second = second;
+    }
+
+    public T getFirst() {
+        return first;
+    }
+
+    public void setFirst(T first) {
+        this.first = first;
+    }
+
+    public U getSecond() {
+        return second;
+    }
+
+    public void setSecond(U second) {
+        this.second = second;
+    }
+
+    // Adds components of two Pair objects and returns a new Pair
+    public Pair<Double, Double> add(Pair<? extends Number, ? extends Number> other) {
+        double newFirst = this.first.doubleValue() + other.getFirst().doubleValue();
+        double newSecond = this.second.doubleValue() + other.getSecond().doubleValue();
+        return new Pair<>(newFirst, newSecond);
+    }
+
+    // Multiplies components of two Pair objects and returns a new Pair
+    public Pair<Double, Double> multiply(Pair<? extends Number, ? extends Number> other) {
+        double newFirst = this.first.doubleValue() * other.getFirst().doubleValue();
+        double newSecond = this.second.doubleValue() * other.getSecond().doubleValue();
+        return new Pair<>(newFirst, newSecond);
+    }
+
+    // Subtracts components of two Pair objects and returns a new Pair
+    public Pair<Double, Double> subtract(Pair<? extends Number, ? extends Number> other) {
+        double newFirst = this.first.doubleValue() - other.getFirst().doubleValue();
+        double newSecond = this.second.doubleValue() - other.getSecond().doubleValue();
+        return new Pair<>(newFirst, newSecond);
+    }
+
+    // Divides components of two Pair objects and returns a new Pair
+    public Pair<Double, Double> divide(Pair<? extends Number, ? extends Number> other) {
+        double newFirst = this.first.doubleValue() / other.getFirst().doubleValue();
+        double newSecond = this.second.doubleValue() / other.getSecond().doubleValue();
+        return new Pair<>(newFirst, newSecond);
+    }
+}
