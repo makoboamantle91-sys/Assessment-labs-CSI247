@@ -53,3 +53,93 @@ public class Pair<T extends Number, U extends Number> {
         return new Pair<>(newFirst, newSecond);
     }
 }
+
+package lab07;
+
+// Exact generic interface structure provided in Slide 23
+interface BigAndSmall<T extends Comparable<T>> {
+    T small();
+    T big();
+}
+
+// Generic implementation class preserving contract rules (Slide 24)
+class MyArrayBounds<T extends Comparable<T>> implements BigAndSmall<T> {
+    private T[] array;
+
+    public MyArrayBounds(T[] array) {
+        this.array = array;
+    }
+
+    @Override
+    public T big() {
+        if (array == null || array.length == 0) return null;
+        T max = array[0];
+        for (T val : array) {
+            if (val != null && val.compareTo(max) > 0) {
+                max = val;
+            }
+        }
+        return max;
+    }
+
+    @Override
+    public T small() {
+        if (array == null || array.length == 0) return null;
+        T min = array[0];
+        for (T val : array) {
+            if (val != null && val.compareTo(min) < 0) {
+                min = val;
+            }
+        }
+        return min;
+    }
+}
+
+
+package lab07;
+
+// Generic class taking 2 type parameters that are subclasses of Number
+public class Pair<T extends Number, U extends Number> {
+    private T first;
+    private U second;
+
+    public Pair(T first, U second) {
+        this.first = first;
+        this.second = second;
+    }
+
+    public T getFirst() { return first; }
+    public void setFirst(T first) { this.first = first; }
+
+    public U getSecond() { return second; }
+    public void setSecond(U second) { this.second = second; }
+
+    // Applied to any two Pair objects to return cross-component sums
+    public Pair<Double, Double> add(Pair<? extends Number, ? extends Number> other) {
+        double newFirst = this.first.doubleValue() + other.getFirst().doubleValue();
+        double newSecond = this.second.doubleValue() + other.getSecond().doubleValue();
+        return new Pair<>(newFirst, newSecond);
+    }
+
+    // Component multiply
+    public Pair<Double, Double> multiply(Pair<? extends Number, ? extends Number> other) {
+        double newFirst = this.first.doubleValue() * other.getFirst().doubleValue();
+        double newSecond = this.second.doubleValue() * other.getSecond().doubleValue();
+        return new Pair<>(newFirst, newSecond);
+    }
+
+    // Component subtract
+    public Pair<Double, Double> subtract(Pair<? extends Number, ? extends Number> other) {
+        double newFirst = this.first.doubleValue() - other.getFirst().doubleValue();
+        double newSecond = this.second.doubleValue() - other.getSecond().doubleValue();
+        return new Pair<>(newFirst, newSecond);
+    }
+
+    // Component divide
+    public Pair<Double, Double> divide(Pair<? extends Number, ? extends Number> other) {
+        double newFirst = this.first.doubleValue() / other.getFirst().doubleValue();
+        double newSecond = this.second.doubleValue() / other.getSecond().doubleValue();
+        return new Pair<>(newFirst, newSecond);
+    }
+}
+
