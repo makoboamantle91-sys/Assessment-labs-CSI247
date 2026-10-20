@@ -1,83 +1,78 @@
 package lab07;
 
-public class LabTester implements BigAndSmall<Integer> {
+public class LabTester {
 
-    // Part (c): Generic printArray method from slide 19
-    public static <E> void printArray(E[] inputArray) {
-        for (E element : inputArray) {
-            if (element != null) {
-                System.out.printf("%s ", element);
-            }
-        }
-        System.out.println();
-    }
-
-    // Part (d): Implementation of BigAndSmall interface methods
-    @Override
-    public Integer findBig(Integer[] array) {
-        if (array == null || array.length == 0) return null;
-        Integer max = array[0];
-        for (Integer val : array) {
-            if (val != null && (max == null || val.compareTo(max) > 0)) {
-                max = val;
-            }
-        }
-        return max;
-    }
-
-    @Override
-    public Integer findSmall(Integer[] array) {
-        if (array == null || array.length == 0) return null;
-        Integer min = array[0];
-        for (Integer val : array) {
-            if (val != null && (min == null || val.compareTo(min) < 0)) {
-                min = val;
-            }
-        }
-        return min;
+    // Task 1(c) / Slide 19: Generic method that prints array elements
+    public static <E> void printArray(E[] elements) {
+        for (E element : elements) { 
+            System.out.printf("%s ", element); 
+        } 
+        System.out.println(); 
     }
 
     public static void main(String[] args) {
-        System.out.println("--- Testing Generic Set Class ---");
+        // ==========================================
+        // TEST TASK 1(b): Generic Set Operations
+        // ==========================================
+        System.out.println("=== 1(b) Testing Generic Sets ===");
         Set<Integer> intSet = new Set<>();
         Set<Double> doubleSet = new Set<>();
         Set<String> stringSet = new Set<>();
 
-        // Populate sets
         intSet.add(10);
         intSet.add(20);
-        doubleSet.add(5.5);
-        stringSet.add("Java");
+        intSet.add(10); // Duplicate addition validation
+        doubleSet.add(4.5);
+        stringSet.add("CSI247");
 
-        // Basic operations
-        System.out.println("Search result (found): " + intSet.search(10));
-        intSet.remove(10);
-        System.out.println("Search result after removal (null): " + intSet.search(10));
+        System.out.println("Search Integer 20 (Found): " + intSet.search(20));
+        intSet.remove(20);
+        System.out.println("Search Integer 20 after removal (Null): " + intSet.search(20));
 
-        // CRITICAL REQUIREMENT TEST: Try to insert a String into a Set of Integers
-        // Un-commenting the line below will trigger a compile-time type safety error:
-        // intSet.add("Hello World"); 
+        // CRITICAL REQUIREMENT CHECK: Insert String into an Integer Set
+        // To observe what happens, un-comment the line below:
+        // intSet.add("This triggers a compile-time type mismatch error!"); 
 
-        System.out.println("\n--- Testing printArray Method ---");
-        Integer[] intArray = {1, 2, 3, 4, 5};
-        String[] stringArray = {"Alpha", "Beta", "Gamma"};
-        printArray(intArray);
-        printArray(stringArray);
 
-        System.out.println("\n--- Testing BigAndSmall Interface ---");
-        LabTester tester = new LabTester();
-        Integer[] sampleValues = {45, 12, 89, 4, 67};
-        System.out.println("Biggest: " + tester.findBig(sampleValues));
-        System.out.println("Smallest: " + tester.findSmall(sampleValues));
+        // ==========================================
+        // TEST TASK 1(c): printArray from Slide 19
+        // ==========================================
+        System.out.println("\n=== 1(c) Testing printArray Method ===");
+        Integer[] numbers = { 2, 4, 5, 7, 8 }; 
+        Double[] rates = { 1.0, 1.5, 2.5, 3.5 }; 
+        String[] languages = { "Java", "C++", "Python" };
 
-        System.out.println("\n--- Testing Generic Pair Class ---");
-        Pair<Integer, Double> pair1 = new Pair<>(10, 20.5);
-        Pair<Float, Integer> pair2 = new Pair<>(5.5f, 2);
+        System.out.print("Integer Array has : ");
+        printArray(numbers); 
+        System.out.print("Double array has : "); 
+        printArray(rates);
+        System.out.print("String array has : ");
+        printArray(languages);
 
-        Pair<Double, Double> sumResult = pair1.add(pair2);
-        Pair<Double, Double> productResult = pair1.multiply(pair2);
 
-        System.out.println("Sum first: " + sumResult.getFirst() + ", second: " + sumResult.getSecond());
-        System.out.println("Product first: " + productResult.getFirst() + ", second: " + productResult.getSecond());
+        // ==========================================
+        // TEST TASK 1(d): BigAndSmall Interface
+        // ==========================================
+        System.out.println("\n=== 1(d) Testing BigAndSmall Interface ===");
+        MyArrayBounds<Integer> intBounds = new MyArrayBounds<>(numbers);
+        System.out.println("Integer Array - Big: " + intBounds.big() + ", Small: " + intBounds.small());
+
+        MyArrayBounds<String> stringBounds = new MyArrayBounds<>(languages);
+        System.out.println("String Array - Big: " + stringBounds.big() + ", Small: " + stringBounds.small());
+
+
+        // ==========================================
+        // TEST TASK 1(e): Bounded Generic Pair math
+        // ==========================================
+        System.out.println("\n=== 1(e) Testing Generic Pair Math ===");
+        Pair<Integer, Integer> pairA = new Pair<>(20, 10);
+        Pair<Double, Float> pairB = new Pair<>(2.5, 2.0f);
+
+        // Mix operations between different Number sub-types
+        Pair<Double, Double> sumResult = pairA.add(pairB);
+        Pair<Double, Double> divResult = pairA.divide(pairB);
+
+        System.out.println("Add Result: First=" + sumResult.getFirst() + ", Second=" + sumResult.getSecond());
+        System.out.println("Divide Result: First=" + divResult.getFirst() + ", Second=" + divResult.getSecond());
     }
 }
